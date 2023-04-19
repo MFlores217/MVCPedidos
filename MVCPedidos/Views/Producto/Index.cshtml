@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Producto>
+@{
+    ViewData["Title"] = "Lista de productos";
+}
+<div class="container card-header">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<hr/>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model=>model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=>model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=>model.Precio)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var producto in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(p=>producto.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(p=>producto.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(p=>producto.Precio)
+                </td>
+                <td>
+                    <a asp-action="Modificar" asp-route-id="@producto.Id">Modificar</a>
+                    |
+                    <a asp-action="Eliminar" asp-route-id="@producto.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+
+    </tfoot>
+
+    <a asp-action="Nuevo">Agregar Producto</a>
+</table>
