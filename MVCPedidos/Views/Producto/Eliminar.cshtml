@@ -1,0 +1,29 @@
+﻿@model Producto
+@{
+    ViewData["Title"] = "Eliminar Productos";
+}
+<div class="row">
+    <div class="col-md-8" mx-auto>
+        <div class="container card-header">
+            <h1>@ViewData["Title"]</h1>
+            <span class="text-danger">¿Confirma que desea eliminar este producto?</span>
+        </div>
+        <p>Verifique la información del producto a eliminar</p>
+        <p><strong>@Html.DisplayNameFor(model=>model.Id)</strong>: @Model.Id</p>
+        <p><strong>@Html.DisplayNameFor(model=>model.Nombre)</strong>: @Model.Nombre</p>
+        <p><strong>@Html.DisplayNameFor(model=>model.Precio)</strong>: @Model.Precio</p>
+        <form asp-action="Eliminar">
+            <input asp-for="Id" type="hidden"/>
+            <input type="submit" value="Confirmar Eliminación" class="btn btn-danger"/>
+            <a asp-action="Index" class="btn btn-secondary">Regresar</a>
+        </form>
+        @{
+            if (!string.IsNullOrEmpty(ViewData["Mensaje"].ToString()))
+            {
+                <hr />
+                <p class="text-danger">@ViewData["Mensaje"]</p>
+            }
+        }
+
+    </div>
+</div>

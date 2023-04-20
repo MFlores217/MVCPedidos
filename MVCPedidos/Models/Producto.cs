@@ -13,6 +13,7 @@ namespace MVCPedidos.Models
 
         [Required(ErrorMessage = "El nombre es requerido")]
         [MaxLength(50, ErrorMessage = "El nombre debe tener máximo 50 carácteres")]
+        [Display(Name = "Descripción")]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "El precio es requerido")]
@@ -20,6 +21,7 @@ namespace MVCPedidos.Models
         [Column(TypeName="decimal(10, 2)")]
         public decimal Precio { get; set; }
 
+        public ICollection<DetalleOrden>? ProductosOrden { get; set; } 
 
     }
 }

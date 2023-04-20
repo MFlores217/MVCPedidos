@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using MVCPedidos.Data;
+using MVCPedidos.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DBContextPedidos>(options=>options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+builder.Services.AddScoped<ProductoService>();
 
 var app = builder.Build();
 

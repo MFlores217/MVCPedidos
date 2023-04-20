@@ -6,6 +6,7 @@
     <h1>@ViewData["Title"]</h1>
 </div>
 <hr/>
+<a asp-action="Nuevo" class="btn btn-primary mx-3">Agregar Producto</a>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -17,6 +18,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model=>model.Precio)
+            </th>
+            <th>
+
             </th>
         </tr>
     </thead>
@@ -33,6 +37,7 @@
                 <td>
                     @Html.DisplayFor(p=>producto.Precio)
                 </td>
+                
                 <td>
                     <a asp-action="Modificar" asp-route-id="@producto.Id">Modificar</a>
                     |
@@ -45,5 +50,6 @@
 
     </tfoot>
 
-    <a asp-action="Nuevo">Agregar Producto</a>
 </table>
+
+
