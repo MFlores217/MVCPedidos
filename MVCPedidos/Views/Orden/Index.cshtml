@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Orden>
+@{
+    ViewData["Title"] = "Lista de Ordenes";
+}
+<div class="container card-header">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<hr />
+<a asp-action="Nuevo" class="btn btn-primary mx-3">Agregar Nueva Orden</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model=>model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=>model.FechaPedido)
+            </th>
+            <th>
+                Cliente
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orden in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(p=>orden.Id)
+                </td>
+                <td>
+                    @orden.FechaPedido.ToShortDateString()
+                </td>
+                <td>
+                    @(orden.Cliente!=null?orden.Cliente.Nombre:"")
+                    @(orden.Cliente!=null?orden.Cliente.Apellido:"")
+                </td>
+
+                <td>
+                    <a asp-action="Modificar" asp-route-id="@orden.Id">Modificar</a>
+                    |
+                    <a asp-action="Eliminar" asp-route-id="@orden.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+    </tfoot>
+
+</table>

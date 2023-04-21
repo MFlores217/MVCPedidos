@@ -85,5 +85,13 @@ namespace MVCPedidos.Services
             }
             return resultado;
         }
+
+        public async Task<bool> Modificar(Producto producto)
+        {
+            _context.Update(producto);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }

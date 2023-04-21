@@ -74,7 +74,43 @@ namespace MVCPedidos.Controllers
                     return View(await _productoService.ObtenerProducto(id));
                 }
             }
-            return View(await _productoService.ObtenerProducto(id));
+            return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Modificar(int? id)
+        {
+            if (id != null)
+            {
+                Producto producto = await _productoService.ObtenerProducto(id);
+                if (producto != null)
+                {
+                    return View(producto);
+                } else
+                {
+                    return BadRequest("El producto no se encuentra");
+                }
+            } else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Modificar(Producto producto)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _productoService.Modificar(producto))
+                {
+                    return RedirectToAction("Index");
+                } else {
+                    return BadRequest("Error al modificar el producto");
+                }
+            }
+            return View(producto);
+        }
+
     }
 }

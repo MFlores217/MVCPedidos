@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DBContextPedidos>(options=>options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 builder.Services.AddScoped<ProductoService>();
+builder.Services.AddScoped<OrdenService>();
 
 var app = builder.Build();
 
