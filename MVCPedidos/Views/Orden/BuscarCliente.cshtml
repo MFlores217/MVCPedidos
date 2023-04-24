@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Cliente>
+@{
+    ViewData["Title"] = "Lista de Clientes";
+}
+
+<table class="table table-striped" id="tablaClientes">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model=>model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=>model.Nombre)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cliente in Model)
+        {
+                <tr>
+                    <td>
+                    @Html.DisplayFor(p=>cliente.Id)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(p=>cliente.Nombre) @Html.DisplayFor(p=>cliente.Apellido)
+                    </td>
+                    <td>
+                    @{
+                        string javascript = $"SeleccionarCliente('{cliente.Id}','{cliente.Nombre+" "+cliente.Apellido}');";
+                    }
+                    <a href="#" onclick="@javascript" data-bs-dismiss="modal">Seleccionar</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+    <tfoot>
+    </tfoot>
+
+</table>

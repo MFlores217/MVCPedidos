@@ -51,5 +51,36 @@ namespace MVCPedidos.Services
                 ).ToListAsync();
             return lista;
         }
+
+        public async Task<Orden> Guardar(Orden orden){
+            orden.FechaPedido = DateTime.Now.Date;
+            orden.FechaEntrega = DateTime.Now.Date.AddDays(5);
+            _context.Ordenes.Add(orden);
+            await _context.SaveChangesAsync();
+            return orden;
+        }
+
+        public async Task<Orden> ObtenerOrden(int id) {
+            Orden? orden = await (_context.Ordenes.Include(c => c.Cliente).Include(d => d.ProductosOrden).ThenInclude(p => p.producto)).FirstOrDefaultAsync(o=>o.Id==id);
+            return orden;
+        }
+
+        public async Task<bool> Eliminar(int id) {
+            Orden orden = await ObtenerOrden(id);
+            if(orden != null) {
+                if (orden.ProductosOrden != null){
+                    if (!orden.ProductosOrden.Count.Equals(0))
+                    {
+                        _context.DetalleOrdenes.RemoveRange(_context.DetalleOrdenes.Where(d => d.OrdenId == id));
+                    }
+                }
+                _context.Remove(orden);
+                await _context.SaveChangesAsync();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
     }
 }
