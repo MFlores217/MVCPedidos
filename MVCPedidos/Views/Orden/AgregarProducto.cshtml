@@ -1,0 +1,40 @@
+﻿@model DetalleOrden
+@{
+    ViewData["Title"] = "Agregar Detalle";
+}
+<form asp-action="AgregarProducto">
+    <div class="input-group">
+        <input asp-for="Id" value="0" type="hidden" readonly/>
+        <input asp-for="OrdenId" type="hidden" readonly/>
+        <input asp-for="ProductoId" readonly id="productoId" placeholder="Código:" class="form-control"/>
+        <span asp-validation-for="ProductoId" class="text-danger"></span>
+        <input type="text" readonly id="productoNombre" class="form-control" placeholder="Nombre de producto:"/>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#productosModal">
+            Buscar productos
+        </button>
+        <input asp-for="Cantidad" id="cantidad" class="form-control" placeholder="Cantidad"/>
+        <span asp-validation-for="Cantidad" class="text-danger"></span>
+    </div>
+    <div class="input-group mt-3">
+        <input type="submit" value="Agregar Producto" class="btn btn-primary"/>
+    </div>
+</form>
+<div class="modal fade" id="productosModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Buscar productos</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+          <div class="modal-body">
+                @await Html.PartialAsync("BuscarProducto", ViewData["Productos"])
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+   </div>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

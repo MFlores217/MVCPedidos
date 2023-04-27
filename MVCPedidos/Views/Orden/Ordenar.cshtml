@@ -1,0 +1,84 @@
+﻿@model OrdenCliente
+@{
+    ViewData["Title"] = "Editar Orden";
+}
+<div class="row">
+    <div class="col-10 mx-auto">
+        <div class="container card-header">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        <form asp-action="EditarOrden">
+            <div class="input-group mt-3">
+                <div class="col-2">
+                    <label class="form-label m-1" asp-for="Id">Número de Orden:</label>
+                </div>
+                <input asp-for="Id" id="OrdenId" value="@Model.Id" readonly class="form-control"/>
+            </div>
+            <div class="input-group mt-3">
+                <div class="col-2">
+                    <label class="form-label m-1">Cliente:</label>
+                </div>
+                <input asp-for="ClienteId" id="clienteId" readonly type="hidden" class="form-control" />
+                <input id="clienteNombre" asp-for="ClienteNombre" readonly class="form-control"/>
+                <span asp-validation-for="ClienteId" class="text-danger"></span>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#clientesModal">
+                    Buscar cliente
+                </button>
+            </div>
+            <div class="input-group mt-3">
+                <div class="col-2">
+                    <label asp-for="FechaPedido" class="form-label m-1">Fecha de Pedido:</label>
+                </div>
+                <input asp-for="FechaPedido" type="date" readonly class="form-control"/>
+                <label asp-for="FechaEntrega" class="form-label m-1">Fecha de Entrega:</label>
+                <input asp-for="FechaEntrega" type="date" class="form-control" />
+                <span asp-validation-for="FechaEntrega"></span>
+            </div>
+            <div class="input-group mt-3">
+                <input type="submit" class="btn btn-primary" value="Modificar Orden"/>
+            </div>
+        </form>
+        <hr />
+        <div class="modal fade" id="clientesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Buscar clientes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                            @await Html.PartialAsync("BuscarCliente", ViewData["Clientes"])
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        @await Html.PartialAsync("AgregarProducto", new DetalleOrden{OrdenId=Model.Id})
+        @await Html.PartialAsync("ProductosOrden", Model.Detalles)
+        <hr />
+        <a asp-action="Index">Regresar</a>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/clientes.js"></script>
+    <script src="~/js/productos.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#tablaDetalles").DataTable({
+            "language": {
+                "url": '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json'
+            },
+            "lengthChange":false,
+            "pageLength":5,
+            "searching":false
+            });
+            $("#productoId").val("");
+            $("#productoNombre").val("");
+            $("#cantidad").val("");
+        });
+    </script>
+}

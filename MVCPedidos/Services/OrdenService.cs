@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVCPedidos.Data;
 using MVCPedidos.Models;
+using MVCPedidos.ViewModels;
 
 namespace MVCPedidos.Services
 {
@@ -53,7 +54,7 @@ namespace MVCPedidos.Services
         }
 
         public async Task<Orden> Guardar(Orden orden){
-            orden.FechaPedido = DateTime.Now.Date;
+            orden.FechaPedido = DateTime.Now;
             orden.FechaEntrega = DateTime.Now.Date.AddDays(5);
             _context.Ordenes.Add(orden);
             await _context.SaveChangesAsync();
@@ -81,6 +82,67 @@ namespace MVCPedidos.Services
                 return false;
             }
         }
+
+        public async Task<OrdenCliente?> ObtenerOrdenCliente(int id){
+            OrdenCliente? orden = await (
+                from o in _context.Ordenes
+                where o.Id == id
+                select new OrdenCliente
+                {
+                    Id = o.Id,
+                    FechaPedido = o.FechaPedido,
+                    FechaEntrega = o.FechaEntrega,
+                    ClienteId = o.ClienteId,
+                    ClienteNombre = o.Cliente!=null?$"{o.Cliente.Nombre} {o.Cliente.Apellido}":"",
+                    Detalles = (
+                        from d in o.ProductosOrden
+                        select new LineaDetalle
+                        {
+                            IdDetalle= d.Id,
+                            ProductoId= d.ProductoId,
+                            Cantidad= d.Cantidad,
+                            NombreProducto=d.producto!=null?d.producto.Nombre:"",
+                            Precio=d.producto!=null?d.producto.Precio:0,
+                            ordenId = d.OrdenId
+                        }).ToList(),
+                }).FirstOrDefaultAsync();
+            return orden;
+        }
+
+        public async Task<bool> AgregarProducto(DetalleOrden detalle){
+            DetalleOrden? item = await _context.DetalleOrdenes.Where(i=>i.ProductoId==detalle.ProductoId && i.OrdenId == detalle.OrdenId).FirstOrDefaultAsync();
+
+            if (item == null) { 
+                _context.DetalleOrdenes.Add(detalle);
+            } else {
+                item.Cantidad=detalle.Cantidad;
+                _context.Update(item);
+            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<int> EditarOrden(Orden orden){
+            int resultado = -1;
+            if (orden.FechaEntrega >= orden.FechaPedido) {
+                _context.Update(orden);
+                resultado = await _context.SaveChangesAsync();
+            }
+            return resultado;
+        }
+
+        public async Task<int> EliminarDetalle(int id) {
+            int ordenId = -1;
+            DetalleOrden? detalle = await _context.DetalleOrdenes.Where(d => d.Id == id).FirstOrDefaultAsync();
+            if(detalle != null) {
+                ordenId = detalle.OrdenId;
+                _context.Remove(detalle);
+                await _context.SaveChangesAsync();
+            }
+            return ordenId;
+        }
+
+
 
     }
 }

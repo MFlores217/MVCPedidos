@@ -1,0 +1,49 @@
+﻿@model IEnumerable<LineaDetalle>
+@{
+    ViewData["Title"] = "Lista de Detalles";
+}
+<hr />
+<table id="tablaDetalles" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model=>model.ProductoId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=>model.NombreProducto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=>model.Cantidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=>model.Precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model=>model.SubTotal)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model){
+            <tr>
+                <td>@Html.DisplayFor(m=>item.ProductoId)</td>
+                <td>@Html.DisplayFor(m=>item.NombreProducto)</td>
+                <td>@Html.DisplayFor(m=>item.Cantidad)</td>
+                <td>@Html.DisplayFor(m=>item.Precio)</td>
+                <td>@Html.DisplayFor(m=>item.SubTotal)</td>
+                <td>
+                    <a asp-action="EliminarDetalle" asp-route-id="@item.IdDetalle">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    @{
+        List<LineaDetalle> lista = Model.ToList();
+    }
+    <p><strong>Total facturado:</strong> @lista.Sum(i=>i.SubTotal)</p>
+</div>
